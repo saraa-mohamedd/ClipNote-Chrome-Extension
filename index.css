@@ -37,17 +37,36 @@ a{
     /* box-shadow: 1px 1px 8px lightgray; */
 }
 
+.add-new-tab-btn,
 #clear-all-btn {
-    background-color: #be8768;
-    color: white;
-    padding: 10px 20px;
-    border: 1px solid #be8768;
     font-weight: bold;
-    margin: 20px auto 10px auto;
-    display: block;
     border-radius: 3px;
     font-size: 16px;
     cursor: pointer;
+}
+
+#clear-all-btn{
+    padding: 10px 20px;
+    margin: 20px auto 10px auto;
+    display: block;
+    background-color: #be8768;
+    color: white;
+    border: 2px solid #be8768;
+}
+
+.add-new-tab-btn{
+    background-color: white;
+    color: #869d7a;
+    border: 2px solid #869d7a;
+    margin-left: 10px;
+    padding: 7px 10px;
+}
+
+.add-new-tab-btn:hover{
+    background-color: #869d7a;
+    color: white;
+    border: 2px solid #869d7aa0;
+    box-shadow: 2px 2px 8px lightgray;
 }
 
 #clear-all-btn:hover {
@@ -73,10 +92,11 @@ li {
 li a {
     margin-top: 12px;
     color: #869d7a;
-    text-decoration: none;
     font-weight: 800;
-    font-size: 16px;
+    text-decoration: none;
+    font-size: 18px;
     align-self: center;
+    border-bottom: 2px dotted #869d7a;
 }
 
 li a:hover{
@@ -116,19 +136,19 @@ ol li p {
 
 .new-tab-cont{
     font-size: 15px;
-    border: 2px solid #869d7aa0;
+    border: 2px solid lightgray;
     height: 30px;
-    margin-top: 20px;
+    margin: 20px 0 0 10px;
 }
 
 .new-note-cont:hover{
-    border: 1px solid #869d7a;
+    border: 1px solid #869d7aa0;
     color: gray;
 }
 
 .new-tab-cont:hover{
-    border: 2px solid #869d7a;
-    color: #869d7a;
+    border: 2px solid #869d7aa0;
+    color: gray;
 }
 
 .new-note-cont input,
@@ -164,28 +184,19 @@ input:focus, textarea:focus{
     right: 1;
     bottom: 5;
     margin-right: 5px;
-}
-
-.new-note-cont button{
     background-color: rgb(247, 247, 247);
     color: gray;
-    
-}
-
-.new-tab-cont button{
-    background-color: #869d7a;
-    color: white;
 }
 
 .new-tab-cont button:hover{
-    background-color: white;
-    color: #869d7a;
-    border: 2px solid #869d7aa0;
+    background-color: #657c59;
+    color: white;
+    /* border: 2px solid #869d7aa0; */
 }
 
 
 .new-note-cont button:hover{
-    background-color: #869d7a;
+    background-color: #886c78;
     color: white;
 }
 
@@ -201,6 +212,8 @@ input:focus, textarea:focus{
     background-color: #B194A1;
     color: white;
     box-shadow: 1px 1px 8px lightgray;
+    border: 1px solid #DDBEA9a0;
+
 }
 
 .new-note-btn:hover{
@@ -211,13 +224,13 @@ input:focus, textarea:focus{
 .new-note-btn{
     color: #B194A1;
     background-color: white;
+    border: 1px solid #DDBEA9a0;
 }
 
 .new-note-btn,
 .notes p{
     padding: 8px;
     margin: 3px;
-    border: 1px solid #DDBEA9a0;
     border-radius: 8px;
     font-size: 12px;
     cursor: pointer;
@@ -261,4 +274,8 @@ input:focus, textarea:focus{
 .link-header button:hover{
     background-color: #CB997E;
     color: white;
+}
+.lrg{
+    font-size: 18px;
+    font-weight: 600;
 }

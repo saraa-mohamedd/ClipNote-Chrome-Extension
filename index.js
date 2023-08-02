@@ -16,17 +16,17 @@ if (tabsFromLocalStorage) {
 }
 else
 {
-    myTabs = []
+    myTabs = [false]
     render(myTabs)
 }
 
 function render(tabs) {
-    if (tabs.length != 0)
+    if (tabs.length != 1)
     {
         let mainLinksList = document.createElement("ul")
 
         bod.innerHTML = ``
-        for (let i = 0; i < tabs.length; i++) {
+        for (let i = 1; i < tabs.length; i++) {
             let newLinkListItem = document.createElement("li")
 
             let linkHeader = document.createElement('div')
@@ -81,37 +81,31 @@ function render(tabs) {
     {
         bod.innerHTML = ""
     }
-    newTabContainer = document.createElement(`div`)
-    newTabContainer.classList.add("new-tab-cont")
-            
-    let newTabLabel = document.createElement("label")
-    newTabLabel.classList.add("new-tab-label")
-    newTabLabel.textContent = "Save Current Tab"
 
-    let newTabInput = document.createElement("input")
-    newTabInput.type = "text"
-    newTabInput.placeholder = "e.g. {Paper Name} by {Author Name}"
-
-    let newTabBtn = document.createElement(`button`)
-    newTabBtn.onclick = function(){
-        if (newTabInput.value.replace(/\s/g, "").length){
-            myTabs.push(["google.com", newTabInput.value, [], false])
-            localStorage.setItem("myTabs", JSON.stringify(myTabs) )
-            render(myTabs) 
-        }
+    let addNewTabBtn = document.createElement(`button`)
+    addNewTabBtn.classList.add("add-new-tab-btn")
+    addNewTabBtn.innerHTML = `<span class="lrg"> + </span> Add This Tab`
+    addNewTabBtn.onclick = function(){
+        myTabs[0] = !myTabs[0]
+        console.log(myTabs[0])
+        localStorage.setItem("myTabs", JSON.stringify(myTabs) )
+        render(myTabs)
     }
-    newTabBtn.textContent = "Save Tab"
+    
+    bod.append(addNewTabBtn)
+    if(myTabs[0])
+    {
+        let newTabContainer = createNewTabContainer()
+        bod.append(newTabContainer)
+    }
 
+    
     let newDltBtn = document.createElement(`button`)
     newDltBtn.onclick = deleteClick
     newDltBtn.textContent = "Clear All Tabs"
     newDltBtn.id = "clear-all-btn"
 
-    newTabContainer.append(newTabLabel)
-    newTabContainer.append(newTabInput)
-    newTabContainer.append(newTabBtn)
-
-    bod.append(newTabContainer)
+   
     bod.append(newDltBtn)
      
 }
@@ -174,21 +168,29 @@ function createNewTabContainer()
 {
     let newTabContainer = document.createElement(`div`)
     newTabContainer.classList.add("new-tab-cont")
+            
+    let newTabLabel = document.createElement("label")
+    newTabLabel.classList.add("new-tab-label")
+    newTabLabel.textContent = "Save Current Tab"
 
     let newTabInput = document.createElement("input")
     newTabInput.type = "text"
+    newTabInput.placeholder = "e.g. {Paper Name} by {Author Name}"
 
     let newTabBtn = document.createElement(`button`)
     newTabBtn.onclick = function(){
-        if (newInput.value.replace(/\s/g, "").length){
-            myTabs.push(["google.com", newInput.value, [], false])
+        if (newTabInput.value.replace(/\s/g, "").length){
+            myTabs[0] = false
+            myTabs.push(["google.com", newTabInput.value, [], false])
             localStorage.setItem("myTabs", JSON.stringify(myTabs) )
             render(myTabs) 
         }
     }
     newTabBtn.textContent = "Save Tab"
 
+    newTabContainer.append(newTabLabel)
     newTabContainer.append(newTabInput)
     newTabContainer.append(newTabBtn)
 
+    return newTabContainer
 }
