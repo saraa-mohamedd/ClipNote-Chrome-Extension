@@ -102,7 +102,7 @@ function render(tabs) {
     
     let newDltBtn = document.createElement(`button`)
     newDltBtn.onclick = deleteClick
-    newDltBtn.textContent = "Clear All Tabs"
+    newDltBtn.textContent = "🗑 Clear All Tabs"
     newDltBtn.id = "clear-all-btn"
 
    

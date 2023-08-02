@@ -57,7 +57,7 @@ a{
 .add-new-tab-btn{
     background-color: white;
     color: #869d7a;
-    border: 2px solid #869d7a;
+    border: 2px dotted #869d7a;
     margin-left: 10px;
     padding: 7px 10px;
 }
@@ -121,7 +121,6 @@ ol li p {
     align-items: start;
     border-radius: 5px;
     background-color: white;
-    border: 1px solid lightgray;
     position: relative;
     padding: 5px;
     gap: 5px;
@@ -129,6 +128,7 @@ ol li p {
     
 }
 .new-note-cont{
+    border: 1px solid lightgray;
     font-size: 13px;
     height: 24px;
     margin: 20px 0 20px 20px;
