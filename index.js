@@ -8,8 +8,6 @@ const tabBtn = document.getElementById("tab-btn")
 const bod = document.getElementById("container")
 
 
-console.log(bod)
-
 if (tabsFromLocalStorage) {
     myTabs = tabsFromLocalStorage
     render(myTabs)
@@ -27,46 +25,53 @@ function render(tabs) {
 
         bod.innerHTML = ``
         for (let i = 1; i < tabs.length; i++) {
+            //creating newLinkListItem (contains linkHeader and notes, essentially each one of these is
+            //                          a link to a tab along with all its accompanying notes and optionally the 
+            //                          ability to add a new note)
             let newLinkListItem = document.createElement("li")
 
-            let linkHeader = document.createElement('div')
-            linkHeader.classList.add("link-header")
+            // creating linkHeader (contains icon, link to tab, and button to delete link)
+            let listIcon = createNewElement("i", ["fa-solid", "fa-paperclip"], "")
+            listIcon.style.color = '#869d7a'
 
-            let linkText = document.createElement("a")
+            let linkHeader = createNewElement("div", ["link-header"], "")
+
+            let linkText = createNewElement("a", [], tabs[i][1])
             linkText.target = "_blank"
             linkText.href = tabs[i][0]
-            linkText.textContent = tabs[i][1]
-
-            let linkDltBtn = document.createElement(`button`)
-            linkDltBtn.textContent = "X"
+            
+            
+            let linkDltBtn = createNewElement("button", [], "X")
             linkDltBtn.addEventListener('click', function(){
                 myTabs.splice(i, 1)
                 localStorage.setItem("myTabs", JSON.stringify(myTabs) )
                 render(myTabs)
             })
 
+            linkHeader.append(listIcon)
             linkHeader.append(linkText)
             linkHeader.append(linkDltBtn)
-            
+
             newLinkListItem.append(linkHeader)
 
-            let notesItems = document.createElement("div")
-            notesItems.classList.add("notes")
+            //creating notesItems (contains all notes for a given link)
+            let notesItems = createNewElement("div", ["notes"], "")
             if (tabs[i][2].length != 0)
             {
                 notesItems = getNotesForLink(tabs, i)
             }
-            let newNoteBtn = document.createElement(`button`)
-            newNoteBtn.classList.add("new-note-btn")
-            newNoteBtn.innerText = "+"
+
+            let newNoteBtn = createNewElement("button", ["new-note-btn"], "+")
             newNoteBtn.onclick = function(){
                 tabs[i][3] = !tabs[i][3]
                 localStorage.setItem("myTabs", JSON.stringify(myTabs) )
                 render(myTabs)
             }
+
             notesItems.append(newNoteBtn)
             newLinkListItem.append(notesItems)
 
+            //check if we've opened the new note container (so re-rendering doesn't close it)
             if (tabs[i][3])
             {
                 let newNoteContainer = createNewNoteContainer(i)
@@ -82,32 +87,16 @@ function render(tabs) {
         bod.innerHTML = ""
     }
 
-    let addNewTabBtn = document.createElement(`button`)
-    addNewTabBtn.classList.add("add-new-tab-btn")
-    addNewTabBtn.innerHTML = `<span class="lrg"> + </span> Add This Tab`
-    addNewTabBtn.onclick = function(){
-        myTabs[0] = !myTabs[0]
-        console.log(myTabs[0])
-        localStorage.setItem("myTabs", JSON.stringify(myTabs) )
-        render(myTabs)
-    }
+    let newTabContainer = createNewTabContainer()
+    bod.append(newTabContainer)
     
-    bod.append(addNewTabBtn)
-    if(myTabs[0])
-    {
-        let newTabContainer = createNewTabContainer()
-        bod.append(newTabContainer)
-    }
-
-    
-    let newDltBtn = document.createElement(`button`)
+    //creating deleteAllBtn (button to delete all tabs)
+    let newDltBtn = createNewElement("button", [], "")
     newDltBtn.onclick = deleteClick
     newDltBtn.textContent = "🗑 Clear All Tabs"
     newDltBtn.id = "clear-all-btn"
 
-   
     bod.append(newDltBtn)
-     
 }
 
 function deleteClick(){
@@ -117,13 +106,12 @@ function deleteClick(){
 }
 
 function createNewNoteContainer(i){
-    let newNoteContainer = document.createElement(`div`)
-    newNoteContainer.classList.add("new-note-cont")
+    let newNoteContainer = createNewElement("div", ["new-note-cont"], "")
 
-    let newNoteInput = document.createElement("input")
+    let newNoteInput = createNewElement("input", [], "")
     newNoteInput.type = "text"
     
-    let newNoteBtn = document.createElement(`button`)
+    let newNoteBtn = createNewElement("button", [], "Add")
     newNoteBtn.onclick = function(){
         if (newNoteInput.value.replace(/\s/g, "").length){
             myTabs[i][2].push(newNoteInput.value)
@@ -132,11 +120,8 @@ function createNewNoteContainer(i){
             render(myTabs) 
         }
     }
-    newNoteBtn.textContent = "Add"
 
-    let newNoteLabel = document.createElement("label")
-    newNoteLabel.classList.add("new-note-label")
-    newNoteLabel.textContent = "New Note"
+    let newNoteLabel = createNewElement("label", ["new-note-label"], "New Note")
 
     newNoteContainer.append(newNoteLabel)
     newNoteContainer.append(newNoteInput)
@@ -146,12 +131,10 @@ function createNewNoteContainer(i){
 }
 
 function getNotesForLink(tabs, i){
-    let notesItems = document.createElement("div")
-    notesItems.classList.add("notes")
+    let notesItems = createNewElement("div", ["notes"], "")
 
     for (let j = 0; j < tabs[i][2].length; j++){
-        let note = document.createElement("p")
-        note.textContent = tabs[i][2][j]
+        let note = createNewElement("p", [], tabs[i][2][j])
         note.addEventListener("dblclick", function(){
             note.remove()
             myTabs[i][2].splice(j, 1)
@@ -166,18 +149,15 @@ function getNotesForLink(tabs, i){
 
 function createNewTabContainer()
 {
-    let newTabContainer = document.createElement(`div`)
-    newTabContainer.classList.add("new-tab-cont")
+    let newTabContainer = createNewElement("div", ["new-tab-cont"], "")
             
-    let newTabLabel = document.createElement("label")
-    newTabLabel.classList.add("new-tab-label")
-    newTabLabel.textContent = "Save Current Tab"
+    let newTabLabel = createNewElement("label", ["new-tab-label"], "Save Current Tab")
 
-    let newTabInput = document.createElement("input")
+    let newTabInput = createNewElement("input", [], "")
     newTabInput.type = "text"
     newTabInput.placeholder = "e.g. {Paper Name} by {Author Name}"
 
-    let newTabBtn = document.createElement(`button`)
+    let newTabBtn = createNewElement("button", [], "Save Tab")
     newTabBtn.onclick = function(){
         if (newTabInput.value.replace(/\s/g, "").length){
             myTabs[0] = false
@@ -186,11 +166,20 @@ function createNewTabContainer()
             render(myTabs) 
         }
     }
-    newTabBtn.textContent = "Save Tab"
 
     newTabContainer.append(newTabLabel)
     newTabContainer.append(newTabInput)
     newTabContainer.append(newTabBtn)
 
     return newTabContainer
+}
+
+function createNewElement(element, classes, text){
+    let newElement = document.createElement(element)
+
+    for (let i = 0; i < classes.length; i++){
+        newElement.classList.add(classes[i])
+    }
+    newElement.textContent = text
+    return newElement
 }

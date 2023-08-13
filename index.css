@@ -7,19 +7,21 @@ body {
 
 #title{
     margin: 20px 0 15px 10px;
-    font-weight: 800;
-    color: #B194A1;
+    font-weight: 900;
+    color: #41b3a3;
     font-size: 40px;
+    text-shadow: 2px 2px 0px #e8a87c;
 }
 
 #subtitle{
     margin: 0 0 30px 10px;
-    color:#869d7a;
+    color:#c38d9e;
+    font-family: 'Work Sans', sans-serif;
 }
 
 a{
     text-decoration: underline;
-    color: #B194A1;
+    color: #e8a87c;
     cursor: pointer;
     font-weight: 700;
 }
@@ -33,11 +35,11 @@ a{
     border-radius: 30px 30px 0 0;
     border: 2px solid lightgray;
     border-bottom: none;
-    padding: 0 10px;
+    padding: 0 10px 20px 10px;
+    /* background-image: linear-gradient(to bottom right, #f28188, #fac3c1); */
     /* box-shadow: 1px 1px 8px lightgray; */
 }
 
-.add-new-tab-btn,
 #clear-all-btn {
     font-weight: bold;
     border-radius: 3px;
@@ -49,34 +51,19 @@ a{
     padding: 10px 20px;
     margin: 20px auto 10px auto;
     display: block;
-    background-color: #be8768;
+    background-color: #e27d60;
     color: white;
-    border: 2px solid #be8768;
-}
-
-.add-new-tab-btn{
-    background-color: white;
-    color: #869d7a;
-    border: 2px dotted #869d7a;
-    margin-left: 10px;
-    padding: 7px 10px;
-}
-
-.add-new-tab-btn:hover{
-    background-color: #869d7a;
-    color: white;
-    border: 2px solid #869d7aa0;
-    box-shadow: 2px 2px 8px lightgray;
+    border: 2px solid #e27d60;
 }
 
 #clear-all-btn:hover {
     background-color: white;
-    color: #be8768;
-    border: 2px solid #be8768;
+    color: #e27d60;
+    border: 2px solid #e27d60;
 }
 
 ul {
-    margin-top: 20px;
+    margin: 20px 0 -10px 0;
     list-style: none;
     /* list-style-image: url('./1200px-Ei-paperclip.svg.png') ; */
     padding-left: 0;
@@ -91,12 +78,13 @@ li {
 
 li a {
     margin-top: 12px;
-    color: #869d7a;
-    font-weight: 800;
+    color: #41b3a3;
+    font-weight: 500;
     text-decoration: none;
     font-size: 18px;
+    font-family: 'Work Sans', sans-serif;
     align-self: center;
-    border-bottom: 2px dotted #869d7a;
+    border-bottom: 2px dotted #e8a87c;
 }
 
 li a:hover{
@@ -138,7 +126,7 @@ ol li p {
     font-size: 15px;
     border: 2px solid lightgray;
     height: 30px;
-    margin: 20px 0 0 10px;
+    margin: 30px 0 0 10px;
 }
 
 .new-note-cont:hover{
@@ -156,7 +144,7 @@ ol li p {
     border: none;
     align-self: center;
     background-color: inherit;
-    width: 85%;
+    width: 80%;
     margin: 0;
     padding: 3px 8px;
 }
@@ -209,27 +197,28 @@ input:focus, textarea:focus{
 }
 
 .notes p{
-    background-color: #B194A1;
+    background-color: #c38d9e;
     color: white;
     box-shadow: 1px 1px 8px lightgray;
-    border: 1px solid #DDBEA9a0;
+    font-style: italic;
+    font-family: 'Work Sans', sans-serif;
 
 }
 
 .new-note-btn:hover{
-    background-color: #B194A1a0;
+    background-color: #246A73a0;
     color: white;
 }
 
 .new-note-btn{
-    color: #B194A1;
+    color: #246A73;
     background-color: white;
-    border: 1px solid #DDBEA9a0;
 }
 
 .new-note-btn,
 .notes p{
-    padding: 8px;
+    border: 1px solid #c38d9eaa;
+    padding: 5px;
     margin: 3px;
     border-radius: 8px;
     font-size: 12px;
@@ -250,10 +239,11 @@ input:focus, textarea:focus{
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 8px;
     align-items: center;
-    margin: 10px 10px 10px 0;
+    /* margin: 10px 10px 10px 0; */
     /* width: 100%; */
+    margin-left: -10px;
     padding-left: 10px;
 }
 
@@ -272,7 +262,7 @@ input:focus, textarea:focus{
 }
 
 .link-header button:hover{
-    background-color: #CB997E;
+    background-color: #e27d60;
     color: white;
 }
 .lrg{
