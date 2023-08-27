@@ -7,24 +7,56 @@ const tabBtn = document.getElementById("tab-btn")
 
 const bod = document.getElementById("container")
 
+// "myTabs" in localStorage is a double dimensional array: the first dimension represents the projects,
+// and the second dimension represents the tabs within each project
+
+// tabsFromLocalStorage = [
+//     {
+//         projectName: "First Pro",
+//         tabs: [
+//             {
+//                 link: "google.com",
+//                 name: "Google",
+//                 notes: ["note1", "note2"],
+//                 newNoteOpen: false
+//             },
+//             {
+//                 link: "youtube.com",
+//                 name: "Youtube",
+//                 notes: ["note1", "note2"],
+//                 newNoteOpen: false
+//             }
+//         ]//project 1 tabs
+//     } //project 1
+// ]
+
 
 if (tabsFromLocalStorage) {
     myTabs = tabsFromLocalStorage
-    render(myTabs)
+    console.log(myTabs)
+    renderProjectTabs()
+    document.getElementById('project-tabs').children[0].classList.add('clicked')
+    render(myTabs, 0)
 }
 else
 {
-    myTabs = [false]
-    render(myTabs)
+    myTabs = []
+    render(myTabs, 0)
+    // document.getElementById('project-tabs').children[0].classList.add('clicked')
 }
 
-function render(tabs) {
-    if (tabs.length != 1)
+function render(lclTabs, projectNum) {
+    let tabs = []
+    
+    if (lclTabs && lclTabs[projectNum])
+        tabs = lclTabs[projectNum].tabs
+
+    if (tabs.length != 0)
     {
         let mainLinksList = document.createElement("ul")
 
         bod.innerHTML = ``
-        for (let i = 1; i < tabs.length; i++) {
+        for (let i = 0; i < tabs.length; i++) {
             //creating newLinkListItem (contains linkHeader and notes, essentially each one of these is
             //                          a link to a tab along with all its accompanying notes and optionally the 
             //                          ability to add a new note)
@@ -32,20 +64,20 @@ function render(tabs) {
 
             // creating linkHeader (contains icon, link to tab, and button to delete link)
             let listIcon = createNewElement("i", ["fa-solid", "fa-paperclip"], "")
-            listIcon.style.color = '#869d7a'
+            listIcon.style.color = '#e8a87c'
 
             let linkHeader = createNewElement("div", ["link-header"], "")
 
-            let linkText = createNewElement("a", [], tabs[i][1])
+            let linkText = createNewElement("a", [], tabs[i].name)
             linkText.target = "_blank"
-            linkText.href = tabs[i][0]
+            linkText.href = tabs[i].link
             
             
             let linkDltBtn = createNewElement("button", [], "X")
             linkDltBtn.addEventListener('click', function(){
-                myTabs.splice(i, 1)
+                myTabs[projectNum].tabs.splice(i, 1)
                 localStorage.setItem("myTabs", JSON.stringify(myTabs) )
-                render(myTabs)
+                render(myTabs, projectNum)
             })
 
             linkHeader.append(listIcon)
@@ -56,25 +88,25 @@ function render(tabs) {
 
             //creating notesItems (contains all notes for a given link)
             let notesItems = createNewElement("div", ["notes"], "")
-            if (tabs[i][2].length != 0)
+            if (tabs[i].notes.length != 0)
             {
-                notesItems = getNotesForLink(tabs, i)
+                notesItems = getNotesForLink(projectNum, tabs, i)
             }
 
             let newNoteBtn = createNewElement("button", ["new-note-btn"], "+")
             newNoteBtn.onclick = function(){
-                tabs[i][3] = !tabs[i][3]
+                tabs[i].newNoteOpen = !tabs[i].newNoteOpen
                 localStorage.setItem("myTabs", JSON.stringify(myTabs) )
-                render(myTabs)
+                render(myTabs, projectNum)
             }
 
             notesItems.append(newNoteBtn)
             newLinkListItem.append(notesItems)
 
             //check if we've opened the new note container (so re-rendering doesn't close it)
-            if (tabs[i][3])
+            if (tabs[i].newNoteOpen)
             {
-                let newNoteContainer = createNewNoteContainer(i)
+                let newNoteContainer = createNewNoteContainer(projectNum, i)
                 newLinkListItem.append(newNoteContainer)
             }
 
@@ -87,25 +119,29 @@ function render(tabs) {
         bod.innerHTML = ""
     }
 
-    let newTabContainer = createNewTabContainer()
+    let newTabContainer = createNewTabContainer(projectNum)
     bod.append(newTabContainer)
     
     //creating deleteAllBtn (button to delete all tabs)
     let newDltBtn = createNewElement("button", [], "")
-    newDltBtn.onclick = deleteClick
-    newDltBtn.textContent = "🗑 Clear All Tabs"
+    newDltBtn.onclick = function(){
+        myTabs.splice(projectNum, 1)
+        localStorage.setItem("myTabs", JSON.stringify(myTabs))
+        renderProjectTabs()
+        render(myTabs, 0)
+    }
+    newDltBtn.textContent = "🗑 Delete Project"
     newDltBtn.id = "clear-all-btn"
 
     bod.append(newDltBtn)
 }
 
 function deleteClick(){
-    localStorage.clear()
     myTabs = []
-    render(myTabs)    
+    render(myTabs, 0)
 }
 
-function createNewNoteContainer(i){
+function createNewNoteContainer(projectNum, i){
     let newNoteContainer = createNewElement("div", ["new-note-cont"], "")
 
     let newNoteInput = createNewElement("input", [], "")
@@ -114,10 +150,10 @@ function createNewNoteContainer(i){
     let newNoteBtn = createNewElement("button", [], "Add")
     newNoteBtn.onclick = function(){
         if (newNoteInput.value.replace(/\s/g, "").length){
-            myTabs[i][2].push(newNoteInput.value)
-            myTabs[i][3] = false
+            myTabs[projectNum].tabs[i].notes.push(newNoteInput.value)
+            myTabs[projectNum].tabs[i].newNoteOpen = false
             localStorage.setItem("myTabs", JSON.stringify(myTabs) )
-            render(myTabs) 
+            render(myTabs, projectNum) 
         }
     }
 
@@ -130,16 +166,16 @@ function createNewNoteContainer(i){
     return newNoteContainer
 }
 
-function getNotesForLink(tabs, i){
+function getNotesForLink(projectNum, tabs, i){
     let notesItems = createNewElement("div", ["notes"], "")
 
-    for (let j = 0; j < tabs[i][2].length; j++){
-        let note = createNewElement("p", [], tabs[i][2][j])
+    for (let j = 0; j < tabs[i].notes.length; j++){
+        let note = createNewElement("p", [], tabs[i].notes[j])
         note.addEventListener("dblclick", function(){
             note.remove()
-            myTabs[i][2].splice(j, 1)
+            myTabs[projectNum].tabs[i].notes.splice(j, 1)
             localStorage.setItem("myTabs", JSON.stringify(myTabs) )
-            render(myTabs)
+            render(myTabs, projectNum)
         })
 
         notesItems.append(note)
@@ -147,7 +183,7 @@ function getNotesForLink(tabs, i){
     return notesItems
 }
 
-function createNewTabContainer()
+function createNewTabContainer(projectNum)
 {
     let newTabContainer = createNewElement("div", ["new-tab-cont"], "")
             
@@ -160,10 +196,29 @@ function createNewTabContainer()
     let newTabBtn = createNewElement("button", [], "Save Tab")
     newTabBtn.onclick = function(){
         if (newTabInput.value.replace(/\s/g, "").length){
-            myTabs[0] = false
-            myTabs.push(["google.com", newTabInput.value, [], false])
+            if (myTabs[projectNum].tabs){
+                myTabs[projectNum].tabs.push(
+                    {
+                        link: "google.com",
+                        name: newTabInput.value, 
+                        notes: [], 
+                        newNoteOpen: false
+                    })
+            }
+            else {
+                myTabs.push(
+                    [
+                        {
+                            link: "google.com",
+                            name: newTabInput.value, 
+                            notes: [], 
+                            newNoteOpen: false
+                        }
+                    ])
+            }
+            
             localStorage.setItem("myTabs", JSON.stringify(myTabs) )
-            render(myTabs) 
+            render(myTabs, projectNum) 
         }
     }
 
@@ -182,4 +237,100 @@ function createNewElement(element, classes, text){
     }
     newElement.textContent = text
     return newElement
+}
+
+document.getElementById('help-btn').addEventListener('click', function(){
+    if (document.getElementById('help-modal').style.display == 'block')
+        document.getElementById('help-modal').style.display = 'none'
+    else
+        document.getElementById('help-modal').style.display = 'block'
+})
+
+
+function addProject(){
+
+    const addProjectBtn = document.getElementById('add-project-btn')
+    let newProjectTab = document.createElement('button')
+    newProjectTab.classList.add('project-tab')
+    
+    let projectTabs = document.getElementById('project-tabs')
+    let newProjectText = document.createElement('span')
+    newProjectText.textContent = `Project${tabsFromLocalStorage.length + 1}`
+    newProjectText.contentEditable = true
+    newProjectTab.append(newProjectText)
+    
+    newProjectTab.addEventListener('click', function(){
+        console.log(newProjectText.textContent)
+        let proIndex =  tabsFromLocalStorage.findIndex(item => item.projectName === newProjectText.textContent); 
+        for (let j = 0; j < projectTabs.children.length; j++)
+                projectTabs.children[j].classList.remove('clicked')
+                        
+        newProjectTab.classList.add('clicked')
+        render(myTabs, proIndex)
+    })
+
+    newProjectTab.addEventListener('change', function(){
+        console.log(newProjectText.textContent)
+        let proIndex =  tabsFromLocalStorage.findIndex(item => item.projectName === newProjectText.textContent);
+        tabsFromLocalStorage[proIndex].projectName = newProjectText.textContent
+        localStorage.setItem("myTabs", JSON.stringify(tabsFromLocalStorage) )
+        renderProjectTabs()
+    })
+
+    if (tabsFromLocalStorage.length >= 2)
+    {
+        document.getElementById('project-tabs').append(newProjectTab)
+        document.getElementById('add-project-btn').style.display = 'none'
+    }
+    else
+    {
+        document.getElementById('project-tabs').removeChild(addProjectBtn)
+        document.getElementById('project-tabs').append(newProjectTab)
+        document.getElementById('project-tabs').append(addProjectBtn)
+    }
+    tabsFromLocalStorage.push({projectName: newProjectTab.textContent, tabs: []})
+    localStorage.setItem("myTabs", JSON.stringify(tabsFromLocalStorage) )
+}
+
+function renderProjectTabs(){
+    let projectTabs = document.getElementById('project-tabs')
+    let addProjectBtn = document.createElement('button')
+    addProjectBtn.id = 'add-project-btn'
+    addProjectBtn.textContent = '+'
+    addProjectBtn.addEventListener('click', addProject)
+
+    projectTabs.innerHTML = ""
+    for (let i = 0; i < tabsFromLocalStorage.length; i++){
+        let newProjectTab = document.createElement('button')
+        newProjectTab.classList.add('project-tab')
+
+        let newProjectText = document.createElement('span')
+        newProjectText.textContent = tabsFromLocalStorage[i].projectName
+        newProjectText.contentEditable = true
+        
+        newProjectTab.append(newProjectText)
+        newProjectTab.addEventListener('click', function(){
+            let proIndex =  tabsFromLocalStorage.findIndex(item => item.projectName === newProjectText.textContent);
+            for (let j = 0; j < projectTabs.children.length; j++)
+                projectTabs.children[j].classList.remove('clicked')
+                        
+            newProjectTab.classList.add('clicked')
+            render(myTabs, proIndex)
+        })
+
+        newProjectText.addEventListener('change', function(){
+            console.log("changed")
+            let proIndex =  tabsFromLocalStorage.findIndex(item => item.projectName === newProjectText.textContent);
+            tabsFromLocalStorage[proIndex].projectName = newProjectText.textContent
+            localStorage.setItem("myTabs", JSON.stringify(tabsFromLocalStorage) )
+            renderProjectTabs()
+        })
+
+
+        projectTabs.append(newProjectTab)
+    }
+
+    if (tabsFromLocalStorage.length <= 2){
+        projectTabs.append(addProjectBtn)
+    }
 }

@@ -12,15 +12,26 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
     <body>
+        <button id="help-btn">
+            <i class="fas fa-lg fa-question-circle"></i> 
+        </button>
         <header>
             <h1 id="title">LinkNote</h1>
             <p id="subtitle">
                 <span class="italics">Organize</span> and<span class="italics"> keep track of</span>
-                 your online sources with names and notes! Need <a>help</a>?
+                 your online sources with names and notes! Feeling lost? Click the help button above!
             </p>
         </header>
+        <div id="project-tabs">
+            <button class="project-tab"><span class="tab-text" contenteditable="true">project1</span></button>
+            <button id="add-project-btn">+</button>
+        </div>
         <div id="container">
             <!-- links and notes go here! (look at render function in index.js)-->
+        </div>
+
+        <div id="help-modal">
+            <h2 id="help-title">Help Desk</h2>
         </div>
         <script src="index.js"></script>
     </body>
