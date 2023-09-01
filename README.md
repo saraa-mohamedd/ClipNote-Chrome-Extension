@@ -1,21 +1,23 @@
-# co55a444c923b8be253106629
+# Extension Name #
 
-Quick start:
+Organize and personalize online links by saving them under your chosen names and adding tags to keep track of which links lead to where! Keep track of up to three projects, with unlimited links in each; adding and deleting links and tags as you please. 
 
-```
-$ npm install
-$ npm start
-````
+### Permissions ###
 
-Head over to https://vitejs.dev/ to learn more about using vite
-## About Scrimba
+1. Chrome tabs
+2. Chrome Local Storage
 
-At Scrimba our goal is to create the best possible coding school at the cost of a gym membership! 💜
-If we succeed with this, it will give anyone who wants to become a software developer a realistic shot at succeeding, regardless of where they live and the size of their wallets 🎉
-The Frontend Developer Career Path aims to teach you everything you need to become a Junior Developer, or you could take a deep-dive with one of our advanced courses 🚀
+### Limitations ###
 
-- [Our courses](https://scrimba.com/allcourses)
-- [The Frontend Career Path](https://scrimba.com/learn/frontend)
-- [Become a Scrimba Pro member](https://scrimba.com/pricing)
+1. Cannot access local files (due to chrome limitations bla bla bla), so don't try to save a local file link _(file://[file location])_ in the extension! It will not be able to link to it!!
 
-Happy Coding!
+## How to Deploy: ##
+
+1. Download the project folder from this repo
+2. Go to __chrome://extensions__ in your chrome browser and turn on developer mode from the top right
+3. Click the __load unpacked__ button from the top right
+4. Select the project folder, and you're done! 
+
+## How to Use: ##
+
+Click the __?__ icon in the top right corner of the extension to toggle the help desk and the 'how to' instructions
