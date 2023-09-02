@@ -32,26 +32,30 @@ const bod = document.getElementById("container")
 // ]
 
 
-if (tabsFromLocalStorage) {
+if (tabsFromLocalStorage.length) {
     myTabs = tabsFromLocalStorage
     console.log(myTabs)
-    renderProjectTabs()
-    if (!myTabs[myTabs[0].lastClicked])
+    if (myTabs.length <= myTabs[0].lastClicked)
         myTabs[0].lastClicked = 0
+    renderProjectTabs()
     document.getElementById('project-tabs').children[myTabs[0].lastClicked].classList.add('clicked')
     render(myTabs, myTabs[0].lastClicked)
 }
 else
 {
     myTabs = [{
+        lastClicked: 0,
         projectName: "Project1",
         tabs: []
     }]
+    renderProjectTabs()
+    document.getElementById('project-tabs').children[myTabs[0].lastClicked].classList.add('clicked')
     render(myTabs, 0)
     // document.getElementById('project-tabs').children[0].classList.add('clicked')
 }
 
 function render(lclTabs, projectNum) {
+    console.log(lclTabs)
     let tabs = []
     
     if (lclTabs && lclTabs[projectNum])
@@ -132,19 +136,25 @@ function render(lclTabs, projectNum) {
     let newDltBtn = createNewElement("button", [], "")
     newDltBtn.onclick = function(){
         myTabs.splice(projectNum, 1)
+        if (!myTabs.length){
+            myTabs = [{
+                lastClicked: 0,
+                projectName: "Project1",
+                tabs: []
+            }]
+        }
+        console.log(myTabs)
         localStorage.setItem("myTabs", JSON.stringify(myTabs))
         renderProjectTabs()
+        document.getElementById('project-tabs').children[0].classList.add('clicked')
         render(myTabs, 0)
     }
-    newDltBtn.textContent = "🗑 Delete Project"
+    let trashIcon = createNewElement("i", ["fa-solid", "fa-trash-can"], "")
+    newDltBtn.append(trashIcon)
+    newDltBtn.innerHTML += "  Delete Project"
     newDltBtn.id = "clear-all-btn"
 
     bod.append(newDltBtn)
-}
-
-function deleteClick(){
-    myTabs = []
-    render(myTabs, 0)
 }
 
 function createNewNoteContainer(projectNum, i){
@@ -201,33 +211,23 @@ function createNewTabContainer(projectNum)
 
     let newTabBtn = createNewElement("button", [], "Save Tab")
     newTabBtn.onclick = function(){
-        if (newTabInput.value.replace(/\s/g, "").length){
-            if (myTabs[projectNum] && myTabs[projectNum].tabs){
-                myTabs[projectNum].tabs.push(
-                    {
-                        link: "google.com",
-                        name: newTabInput.value, 
-                        notes: [], 
-                        newNoteOpen: false
+            if (newTabInput.value.replace(/\s/g, "").length){
+                if (myTabs[projectNum] && myTabs[projectNum].tabs){
+                    chrome.tabs.query({active: true, currentWindow: true}, function(chrometabs){
+                        myTabs[projectNum].tabs.push(
+                            {
+                                link: chrometabs[0].url,
+                                name: newTabInput.value,
+                                notes: [],
+                                newNoteOpen: false
+                            })
+                        localStorage.setItem("myTabs", JSON.stringify(myTabs) )
+                        render(myTabs, projectNum)
                     })
+                }
             }
-            else {
-                myTabs.push(
-                    [
-                        {
-                            link: "google.com",
-                            name: newTabInput.value, 
-                            notes: [], 
-                            newNoteOpen: false
-                        }
-                    ])
-            }
-            
-            localStorage.setItem("myTabs", JSON.stringify(myTabs) )
-            render(myTabs, projectNum) 
         }
-    }
-
+    
     newTabContainer.append(newTabLabel)
     newTabContainer.append(newTabInput)
     newTabContainer.append(newTabBtn)
@@ -268,6 +268,7 @@ function addProject(){
     let tabTextContent = `Project${startindex}`
     newProjectText.textContent = tabTextContent
     newProjectText.contentEditable = true
+    newProjectText.spellcheck = false
     newProjectTab.append(newProjectText)
     
     newProjectTab.addEventListener('click', function(){
@@ -290,7 +291,7 @@ function addProject(){
         tabsFromLocalStorage[proIndex].projectName = newProjectText.textContent
         tabTextContent = newProjectText.textContent
         localStorage.setItem("myTabs", JSON.stringify(tabsFromLocalStorage) )
-        renderProjectTabs()
+        // renderProjectTabs()
     }
 
     if (tabsFromLocalStorage.length >= 2)
@@ -315,6 +316,7 @@ function renderProjectTabs(){
     addProjectBtn.textContent = '+'
     addProjectBtn.addEventListener('click', addProject)
 
+    const tabsFromLocalStorage = JSON.parse( localStorage.getItem("myTabs") )
     projectTabs.innerHTML = ""
     for (let i = 0; i < tabsFromLocalStorage.length; i++){
         let newProjectTab = document.createElement('button')
@@ -335,6 +337,7 @@ function renderProjectTabs(){
             for (tab of myTabs)
                 tab.lastClicked = proIndex
             newProjectTab.classList.add('clicked')
+            console.log(newProjectTab.style.height)
 
             localStorage.setItem("myTabs", JSON.stringify(tabsFromLocalStorage) )
             render(myTabs, proIndex)
