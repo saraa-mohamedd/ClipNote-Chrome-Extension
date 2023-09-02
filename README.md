@@ -1,4 +1,4 @@
-# Extension Name #
+# ClipNote ₊˚ 🧷 ﾟ.⋆˚#
 
 Organize and personalize online links by saving them under your chosen names and adding tags to keep track of which links lead to where! Keep track of up to three projects, with unlimited links in each; adding and deleting links and tags as you please. 
 
