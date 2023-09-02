@@ -2,35 +2,12 @@ let myTabs = []
 const inputEl = document.getElementById("input-el")
 // const inputBtn = document.getElementById("input-btn")
 const deleteBtn = document.getElementById("delete-btn")
+
+//tabsFromLocalStorage used to only intiially get the localstorage info
 const tabsFromLocalStorage = JSON.parse( localStorage.getItem("myTabs") )
 const tabBtn = document.getElementById("tab-btn")
 
 const bod = document.getElementById("container")
-
-// "myTabs" in localStorage is a double dimensional array: the first dimension represents the projects,
-// and the second dimension represents the tabs within each project
-
-// tabsFromLocalStorage = [
-//     {
-//         lastClicked: 0,
-//         projectName: "First Pro",
-//         tabs: [
-//             {
-//                 link: "google.com",
-//                 name: "Google",
-//                 notes: ["note1", "note2"],
-//                 newNoteOpen: false
-//             },
-//             {
-//                 link: "youtube.com",
-//                 name: "Youtube",
-//                 notes: ["note1", "note2"],
-//                 newNoteOpen: false
-//             }
-//         ]//project 1 tabs
-//     } //project 1
-// ]
-
 
 if (tabsFromLocalStorage.length) {
     myTabs = tabsFromLocalStorage
@@ -38,6 +15,7 @@ if (tabsFromLocalStorage.length) {
     if (myTabs.length <= myTabs[0].lastClicked)
         myTabs[0].lastClicked = 0
     renderProjectTabs()
+    console.log(myTabs[0].lastClicked)
     document.getElementById('project-tabs').children[myTabs[0].lastClicked].classList.add('clicked')
     render(myTabs, myTabs[0].lastClicked)
 }
@@ -262,8 +240,8 @@ function addProject(){
     let projectTabs = document.getElementById('project-tabs')
     let newProjectText = document.createElement('span')
 
-    let startindex = tabsFromLocalStorage.length + 1
-    while (tabsFromLocalStorage.filter(item => item.projectName === `Project${startindex}`).length != 0)
+    let startindex = myTabs.length + 1
+    while (myTabs.filter(item => item.projectName === `Project${startindex}`).length != 0)
         startindex++
     let tabTextContent = `Project${startindex}`
     newProjectText.textContent = tabTextContent
@@ -272,7 +250,7 @@ function addProject(){
     newProjectTab.append(newProjectText)
     
     newProjectTab.addEventListener('click', function(){
-        let proIndex =  tabsFromLocalStorage.findIndex(item => item.projectName === newProjectText.textContent); 
+        let proIndex =  myTabs.findIndex(item => item.projectName === newProjectText.textContent); 
         for (let j = 0; j < projectTabs.children.length; j++)
                 projectTabs.children[j].classList.remove('clicked')
                         
@@ -280,21 +258,21 @@ function addProject(){
         newProjectTab.classList.add('clicked')
         for (tab of myTabs)
             tab.lastClicked = proIndex
-        localStorage.setItem("myTabs", JSON.stringify(tabsFromLocalStorage) )
+        localStorage.setItem("myTabs", JSON.stringify(myTabs) )
         render(myTabs, proIndex)
     })
 
     newProjectText.oninput = function(){
         console.log(newProjectText.textContent)
-        let proIndex =  tabsFromLocalStorage.findIndex(item => item.projectName === tabTextContent);
+        let proIndex =  myTabs.findIndex(item => item.projectName === tabTextContent);
         console.log(proIndex)
-        tabsFromLocalStorage[proIndex].projectName = newProjectText.textContent
+        myTabs[proIndex].projectName = newProjectText.textContent
         tabTextContent = newProjectText.textContent
-        localStorage.setItem("myTabs", JSON.stringify(tabsFromLocalStorage) )
+        localStorage.setItem("myTabs", JSON.stringify(myTabs) )
         // renderProjectTabs()
     }
 
-    if (tabsFromLocalStorage.length >= 2)
+    if (myTabs.length >= 2)
     {
         document.getElementById('project-tabs').append(newProjectTab)
         document.getElementById('add-project-btn').style.display = 'none'
@@ -305,8 +283,8 @@ function addProject(){
         document.getElementById('project-tabs').append(newProjectTab)
         document.getElementById('project-tabs').append(addProjectBtn)
     }
-    tabsFromLocalStorage.push({lastClicked: myTabs[0].lastClicked, projectName: newProjectTab.textContent, tabs: []})
-    localStorage.setItem("myTabs", JSON.stringify(tabsFromLocalStorage) )
+    myTabs.push({lastClicked: myTabs[0].lastClicked, projectName: newProjectTab.textContent, tabs: []})
+    localStorage.setItem("myTabs", JSON.stringify(myTabs) )
 }
 
 function renderProjectTabs(){
@@ -316,20 +294,20 @@ function renderProjectTabs(){
     addProjectBtn.textContent = '+'
     addProjectBtn.addEventListener('click', addProject)
 
-    const tabsFromLocalStorage = JSON.parse( localStorage.getItem("myTabs") )
+    const myTabs = JSON.parse( localStorage.getItem("myTabs") )
     projectTabs.innerHTML = ""
-    for (let i = 0; i < tabsFromLocalStorage.length; i++){
+    for (let i = 0; i < myTabs.length; i++){
         let newProjectTab = document.createElement('button')
         newProjectTab.classList.add('project-tab')
 
         let newProjectText = document.createElement('span')
-        let tabTextContent = tabsFromLocalStorage[i].projectName
+        let tabTextContent = myTabs[i].projectName
         newProjectText.textContent = tabTextContent
         newProjectText.contentEditable = true
         
         newProjectTab.append(newProjectText)
         newProjectTab.addEventListener('click', function(){
-            let proIndex =  tabsFromLocalStorage.findIndex(item => item.projectName === newProjectText.textContent);
+            let proIndex =  myTabs.findIndex(item => item.projectName === newProjectText.textContent);
             console.log(proIndex)
             for (let j = 0; j < projectTabs.children.length; j++)
                 projectTabs.children[j].classList.remove('clicked')
@@ -337,9 +315,9 @@ function renderProjectTabs(){
             for (tab of myTabs)
                 tab.lastClicked = proIndex
             newProjectTab.classList.add('clicked')
-            console.log(newProjectTab.style.height)
+            console.log(newProjectTab.offsetHeight)
 
-            localStorage.setItem("myTabs", JSON.stringify(tabsFromLocalStorage) )
+            localStorage.setItem("myTabs", JSON.stringify(myTabs) )
             render(myTabs, proIndex)
         })
 
@@ -347,12 +325,15 @@ function renderProjectTabs(){
             console.log("changed")
 
             if (newProjectText.textContent.replace(/\s/g, "").length
-                && tabsFromLocalStorage.filter(item => item.projectName === newProjectText.textContent).length != 1)
+                && myTabs.filter(item => item.projectName === newProjectText.textContent).length != 1)
             {
-                let proIndex =  tabsFromLocalStorage.findIndex(item => item.projectName === tabTextContent);
-                tabsFromLocalStorage[proIndex].projectName = newProjectText.textContent
+                let proIndex =  myTabs.findIndex(item => item.projectName === tabTextContent);
+                myTabs[proIndex].projectName = newProjectText.textContent
                 tabTextContent = newProjectText.textContent
-                localStorage.setItem("myTabs", JSON.stringify(tabsFromLocalStorage) )
+
+                // if (tabTextContent.length > 10)
+                //     newProjectText.textContent = tabTextContent.slice(0, 10) + ".."
+                localStorage.setItem("myTabs", JSON.stringify(myTabs) )
             }
             else {
                 newProjectText.textContent = tabTextContent
@@ -364,7 +345,7 @@ function renderProjectTabs(){
         projectTabs.append(newProjectTab)
     }
 
-    if (tabsFromLocalStorage.length <= 2){
+    if (myTabs.length <= 2){
         projectTabs.append(addProjectBtn)
     }
 }

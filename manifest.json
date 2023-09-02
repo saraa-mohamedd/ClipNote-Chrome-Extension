@@ -1,11 +1,12 @@
 {
     "manifest_version": 3,
     "version": "1.0",
-    "name": "LinkNote",
+    "name": "ClipNote",
     "action": {
         "default_popup": "index.html",
         "default_icon": "icon.png"
     },
+    "description": "Organize and keep track of online links and notes with this handy-dandy extension.",
     "permissions": [
         "tabs",
         "fileSystem",
