@@ -6,7 +6,7 @@
         "default_popup": "index.html",
         "default_icon": "logos/logo.png"
     },
-    "description": "Organize and keep track of online links and notes with this handy-dandy extension.",
+    "description": "Organize and keep track of online links and notes with this handy-dandy extension~",
     "permissions": [
         "tabs",
         "fileSystem",
