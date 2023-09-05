@@ -29,7 +29,7 @@ body {
 #project-tabs{
     display:flex;
     flex-direction: row;
-    
+
 }
 
 .project-tab > span:focus{
@@ -382,7 +382,7 @@ input:focus, textarea:focus{
     border-radius: 10px 10px 0px 0px;
     border: 2px solid #e8a87caa;
     border-bottom: 1px solid #41b3a3;
-    font-size: 15px;
+    font-size: 14px;
     background-color: #82b3ac;
     width: 30%;
     color: white;
