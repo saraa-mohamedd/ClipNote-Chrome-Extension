@@ -9,7 +9,7 @@ const tabBtn = document.getElementById("tab-btn")
 
 const bod = document.getElementById("container")
 
-if (tabsFromLocalStorage.length) {
+if (tabsFromLocalStorage && tabsFromLocalStorage.length) {
     myTabs = tabsFromLocalStorage
     console.log(myTabs)
     if (myTabs.length <= myTabs[0].lastClicked)
@@ -26,6 +26,7 @@ else
         projectName: "Project1",
         tabs: []
     }]
+    localStorage.setItem("myTabs", JSON.stringify(myTabs) )
     renderProjectTabs()
     document.getElementById('project-tabs').children[myTabs[0].lastClicked].classList.add('clicked')
     render(myTabs, 0)
