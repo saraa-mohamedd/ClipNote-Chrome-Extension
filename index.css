@@ -26,6 +26,12 @@ body {
     color: #c38d9e;
 }
 
+#project-tabs{
+    display:flex;
+    flex-direction: row;
+    
+}
+
 .project-tab > span:focus{
     outline: none;
     /* outline: solid #977680 2px; */
