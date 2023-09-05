@@ -14,10 +14,10 @@ Organize and personalize online links by saving them under your chosen names and
 
 ## ₊˚ How to Deploy: ₊˚ ##
 
-1. Download the project folder from this repo
+1. Download the project folder from this repo (click on the green "Code" button and then "Download Zip")
 2. Go to __chrome://extensions__ in your chrome browser and turn on developer mode from the top right
 3. Click the __load unpacked__ button from the top right
-4. Select the project folder, and you're done! 
+4. Select the project folder (make sure to select the innermost folder, an extra folder may be created when unzipping!), and you're done! 
 
 ## ₊˚ How to Use: ₊˚ ##
 
