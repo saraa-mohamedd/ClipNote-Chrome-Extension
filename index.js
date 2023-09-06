@@ -141,6 +141,18 @@ function createNewNoteContainer(projectNum, i){
 
     let newNoteInput = createNewElement("input", [], "")
     newNoteInput.type = "text"
+
+    newNoteInput.addEventListener("keypress", function(event) {
+        if (event.key == "Enter"){
+            event.preventDefault()
+            if (newNoteInput.value.replace(/\s/g, "").length){
+                myTabs[projectNum].tabs[i].notes.push(newNoteInput.value)
+                myTabs[projectNum].tabs[i].newNoteOpen = false
+                localStorage.setItem("myTabs", JSON.stringify(myTabs) )
+                render(myTabs, projectNum) 
+            }
+        }
+    })
     
     let newNoteBtn = createNewElement("button", [], "Add")
     newNoteBtn.onclick = function(){
@@ -188,6 +200,26 @@ function createNewTabContainer(projectNum)
     newTabInput.type = "text"
     newTabInput.placeholder = "e.g. {Paper Name} by {Author Name}"
 
+    newTabInput.addEventListener("keypress", function(event) {
+        if (event.key == "Enter"){
+            event.preventDefault()
+            if (newTabInput.value.replace(/\s/g, "").length){
+                if (myTabs[projectNum] && myTabs[projectNum].tabs){
+                    chrome.tabs.query({active: true, currentWindow: true}, function(chrometabs){
+                        myTabs[projectNum].tabs.push(
+                            {
+                                link: chrometabs[0].url,
+                                name: newTabInput.value,
+                                notes: [],
+                                newNoteOpen: false
+                            })
+                        localStorage.setItem("myTabs", JSON.stringify(myTabs) )
+                        render(myTabs, projectNum)
+                    })
+                }
+            }
+        }
+    })
     let newTabBtn = createNewElement("button", [], "Save Tab")
     newTabBtn.onclick = function(){
             if (newTabInput.value.replace(/\s/g, "").length){
