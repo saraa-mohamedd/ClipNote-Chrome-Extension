@@ -5,17 +5,22 @@ const deleteBtn = document.getElementById("delete-btn")
 
 //tabsFromLocalStorage used to only intiially get the localstorage info
 const tabsFromLocalStorage = JSON.parse( localStorage.getItem("myTabs") )
+const theme = JSON.parse( localStorage.getItem("colorTheme") )
 const tabBtn = document.getElementById("tab-btn")
 
 const bod = document.getElementById("container")
 
+if (!theme)
+    localStorage.setItem("colorTheme", JSON.stringify({theme: "default"}))
+
+setTheme()
+
+
 if (tabsFromLocalStorage && tabsFromLocalStorage.length) {
     myTabs = tabsFromLocalStorage
-    console.log(myTabs)
     if (myTabs.length <= myTabs[0].lastClicked)
         myTabs[0].lastClicked = 0
     renderProjectTabs()
-    console.log(myTabs[0].lastClicked)
     document.getElementById('project-tabs').children[myTabs[0].lastClicked].classList.add('clicked')
     render(myTabs, myTabs[0].lastClicked)
 }
@@ -34,7 +39,6 @@ else
 }
 
 function render(lclTabs, projectNum) {
-    console.log(lclTabs)
     let tabs = []
     
     if (lclTabs && lclTabs[projectNum])
@@ -122,7 +126,6 @@ function render(lclTabs, projectNum) {
                 tabs: []
             }]
         }
-        console.log(myTabs)
         localStorage.setItem("myTabs", JSON.stringify(myTabs))
         renderProjectTabs()
         document.getElementById('project-tabs').children[0].classList.add('clicked')
@@ -287,7 +290,6 @@ function addProject(){
         for (let j = 0; j < projectTabs.children.length; j++)
                 projectTabs.children[j].classList.remove('clicked')
                         
-        console.log(proIndex)
         newProjectTab.classList.add('clicked')
         for (tab of myTabs)
             tab.lastClicked = proIndex
@@ -296,9 +298,7 @@ function addProject(){
     })
 
     newProjectText.oninput = function(){
-        console.log(newProjectText.textContent)
         let proIndex =  myTabs.findIndex(item => item.projectName === tabTextContent);
-        console.log(proIndex)
         myTabs[proIndex].projectName = newProjectText.textContent
         tabTextContent = newProjectText.textContent
         localStorage.setItem("myTabs", JSON.stringify(myTabs) )
@@ -341,21 +341,18 @@ function renderProjectTabs(){
         newProjectTab.append(newProjectText)
         newProjectTab.addEventListener('click', function(){
             let proIndex =  myTabs.findIndex(item => item.projectName === newProjectText.textContent);
-            console.log(proIndex)
             for (let j = 0; j < projectTabs.children.length; j++)
                 projectTabs.children[j].classList.remove('clicked')
                         
             for (tab of myTabs)
                 tab.lastClicked = proIndex
             newProjectTab.classList.add('clicked')
-            console.log(newProjectTab.offsetHeight)
 
             localStorage.setItem("myTabs", JSON.stringify(myTabs) )
             render(myTabs, proIndex)
         })
 
         newProjectText.addEventListener('input', function(){
-            console.log("changed")
 
             if (newProjectText.textContent.replace(/\s/g, "").length
                 && myTabs.filter(item => item.projectName === newProjectText.textContent).length != 1)
@@ -382,3 +379,71 @@ function renderProjectTabs(){
         projectTabs.append(addProjectBtn)
     }
 }
+
+function setTheme(){
+    const theme = JSON.parse( localStorage.getItem("colorTheme") )
+    if (theme.theme == "default")
+    {
+        document.documentElement.style.setProperty( '--bg-color', '#ffffff' );
+        document.documentElement.style.setProperty( '--primary-color', '#41b3a3' );
+        document.documentElement.style.setProperty( '--secondary-color', '#c38d9e' );
+        document.documentElement.style.setProperty( '--secondary-color-diluted', '#c38d9eaa' );
+        document.documentElement.style.setProperty( '--tertiary-color', '#e8a87c' );
+        document.documentElement.style.setProperty( '--tertiary-color-diluted', '#e8a87caa' );
+         document.documentElement.style.setProperty('--quaternary-color', '#FAC3C1');
+        document.documentElement.style.setProperty( '--tab-color', '#82b3ac' );
+        document.documentElement.style.setProperty('--note-text-color', 'white');
+        document.documentElement.style.setProperty('--small-btn-color', 'rgb(247, 247, 247)');
+        document.documentElement.style.setProperty('--modal-bg-color', 'rgba(255, 255, 255, 0.95)');
+        document.documentElement.style.setProperty('--link-hover-color', '#38423B');
+        document.documentElement.style.setProperty('--help-header-color', '#428b82');
+        document.documentElement.style.setProperty('--note-cont-hover-color', '#886c78aa');
+        document.documentElement.style.setProperty('--note-btn-hover-color', '#977680');
+        document.documentElement.style.setProperty('--tab-cont-hover-color', '#456e69aa');
+        document.documentElement.style.setProperty('--tab-btn-hover-color', '#407971');
+        document.documentElement.style.setProperty('--gray-tone', 'lightgray');
+        document.documentElement.style.setProperty('--red-tone', '#e27d60');
+        document.documentElement.style.setProperty('--input-text-color', 'black');
+        document.documentElement.style.setProperty('--focused-text-color', '#f0e2e7');
+        document.documentElement.style.setProperty('--selected-text-color', '#976f7c');
+
+    }
+    else if (theme.theme == "dark")
+    {
+        document.documentElement.style.setProperty('--bg-color', '#2D2A3E')
+        document.documentElement.style.setProperty('--primary-color', '#f9db6d');
+        document.documentElement.style.setProperty('--secondary-color', '#B8D9DF');
+        document.documentElement.style.setProperty('--secondary-color-diluted', '#B8D9DF');
+        document.documentElement.style.setProperty('--tertiary-color', '#F79BBF');
+        document.documentElement.style.setProperty('--tertiary-color-diluted', '#F79BBFaa');
+        document.documentElement.style.setProperty('--tab-color', '#E6CE7A');
+        document.documentElement.style.setProperty('--note-text-color', '#2D2A3E');
+        document.documentElement.style.setProperty('--small-btn-color', '#3C3856');
+        document.documentElement.style.setProperty('--modal-bg-color', '#2D2A3Ee8');
+        document.documentElement.style.setProperty('--link-hover-color', '#ECE5C8');
+        document.documentElement.style.setProperty('--help-header-color', '#E4D290');
+        document.documentElement.style.setProperty('--quaternary-color', '#8784B8');
+        document.documentElement.style.setProperty('--note-cont-hover-color', '#C0D6DA');
+        document.documentElement.style.setProperty('--note-btn-hover-color', '#9AB8BD');
+        document.documentElement.style.setProperty('--tab-cont-hover-color', '#E4D290aa');
+        document.documentElement.style.setProperty('--tab-btn-hover-color', '#E2CF8B');
+        document.documentElement.style.setProperty('--gray-tone', 'rgb(116, 116, 116)');
+        document.documentElement.style.setProperty('--red-tone', '#D05F60');
+        document.documentElement.style.setProperty('--input-text-color', 'whitesmoke');
+        document.documentElement.style.setProperty('--focused-text-color', '#56526E');
+        document.documentElement.style.setProperty('--selected-text-color', '#8C899B');
+
+        
+    }
+}
+
+function toggleTheme(){
+    if (JSON.parse( localStorage.getItem("colorTheme") ).theme == "default")
+        localStorage.setItem("colorTheme", JSON.stringify({theme: "dark"}) )
+    else
+        localStorage.setItem("colorTheme", JSON.stringify({theme: "default"}) )
+
+    setTheme()
+}
+
+document.getElementById('palette-btn').addEventListener('click', toggleTheme)
