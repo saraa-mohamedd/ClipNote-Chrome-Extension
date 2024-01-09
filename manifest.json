@@ -17,9 +17,9 @@
         "32": "logos/logo32.png",
         "48": "logos/logo48.png",
         "128": "logos/logo128.png",
-        "256": "logos/logo.png",
-        "512": "logos/logo.png",
-        "1024": "logos/logo.png",
-        "2048": "logos/logo.png"
+        "256": "logos/circle-logo.png",
+        "512": "logos/circle-logo.png",
+        "1024": "logos/circle-logo.png",
+        "2048": "logos/circle-logo.png"
     }
 }

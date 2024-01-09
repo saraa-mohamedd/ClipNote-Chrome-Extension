@@ -23,6 +23,7 @@ body {
     cursor: pointer;
     border: none;
     background: none;
+    z-index: 1000;
 }
 
 #help-btn{
